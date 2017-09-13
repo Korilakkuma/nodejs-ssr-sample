@@ -1,0 +1,54 @@
+{
+  "name": "spa-sample-with-redux",
+  "version": "0.0.0",
+  "description": "SPA (Single Page Application) sample with Redux",
+  "main": "app-server.js",
+  "scripts": {
+    "lint:js": "eslint ./src/*.js ./src/**/*.js",
+    "lint:css": "stylelint ./src/*.css ./src/**/*.css",
+    "lint": "npm run lint:js && npm run lint:css",
+    "build:js": "webpack --entry ./src/server.js --target node --output-filename ./app-server.js && webpack --entry ./src/client.js --target web --output-filename ./public/app.js",
+    "build:css": "webpack --entry ./src/main.css --output-filename ./public/app.css",
+    "build": "npm run build:js && npm run build:css",
+    "start": "npm run lint && npm run build && node app-server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Korilakkuma/spa-sample-with-redux.git"
+  },
+  "author": "Korilakkuma <rilakkuma.san.xjapan@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Korilakkuma/spa-sample-with-redux/issues"
+  },
+  "homepage": "https://github.com/Korilakkuma/spa-sample-with-redux",
+  "dependencies": {
+    "express": "^4.15.4",
+    "morgan": "^1.8.2",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.1",
+    "eslint": "^4.5.0",
+    "eslint-cli": "^1.1.1",
+    "eslint-plugin-react": "^7.3.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "postcss-easy-import": "^2.0.0",
+    "postcss-loader": "^2.0.6",
+    "stylelint": "^8.0.0",
+    "stylelint-config-standard": "^17.0.0",
+    "webpack": "^3.5.5"
+  }
+}
