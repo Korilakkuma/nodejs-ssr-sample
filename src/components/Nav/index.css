@@ -1,0 +1,26 @@
+.Nav {
+    margin: 24px 0 0 24px;
+}
+
+.Nav > li {
+    display: inline-block;
+    margin-right: 12px;
+}
+
+.Nav > li::before {
+    content: "";
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: -4px;
+    border-top: 10px solid transparent;
+    border-left: 15px solid var(--base-color);
+    border-bottom: 10px solid transparent;
+}
+
+.Nav > li > a {
+    text-decoration: none;
+}
+
+.Nav > li > a:hover {
+    text-decoration: underline;
+}
