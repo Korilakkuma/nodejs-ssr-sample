@@ -1,0 +1,21 @@
+.Counter {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.Counter button:not(:first-child) {
+    margin-left: 12px;
+}
+
+.Counter__up,
+.Counter__down {
+    width: 128px;
+    height: 128px;
+    line-height: 128px;
+    font-size: calc(var(--font-size-normal) * 2);
+    border-radius: 12px;
+}
+
+.Counter__count {
+    font-size: calc(var(--font-size-normal) * 4);
+}
