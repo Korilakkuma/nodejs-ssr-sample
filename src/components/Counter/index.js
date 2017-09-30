@@ -17,6 +17,8 @@ class Counter extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.initialCount = (props.match && props.match.params) ? parseInt(props.match.params.count) : 0;
     }
 
     onClickUpButton() {
@@ -27,15 +29,17 @@ class Counter extends React.Component {
         this.props.dispatch(Actions.count(this.props.count - 1));
     }
 
+    componentWillUnmount() {
+        this.props.dispatch(Actions.count(0));
+    }
+
     render() {
-        const count = (this.props.match && this.props.match.params) ? parseInt(this.props.match.params.count) : 0;
+        let count;
 
-        let currentCount;
-
-        if (isNaN(count)) {
-            currentCount = this.props.count;
+        if (isNaN(this.initialCount)) {
+            count = this.props.count;
         } else {
-            currentCount = this.props.count + count;
+            count = this.props.count + this.initialCount;
         }
 
         return (
@@ -45,7 +49,7 @@ class Counter extends React.Component {
                   <button type="button" className={`${Counter.CLASS_NAME}__down Button`} onClick={this.onClickDownButton.bind(this)}>-</button>
               </p>
               <p>
-                  <span className={`${Counter.CLASS_NAME}__count`}>{currentCount}</span>
+                  <span className={`${Counter.CLASS_NAME}__count`}>{count}</span>
               </p>
           </div>
         );
