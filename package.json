@@ -6,11 +6,20 @@
   "scripts": {
     "lint:js": "eslint ./src/*.js ./src/**/*.js",
     "lint:css": "stylelint ./src/*.css ./src/**/*.css",
-    "lint": "npm run lint:js && npm run lint:css",
-    "build:js": "webpack --entry ./src/server.js --target node --output-filename ./app-server.js && webpack --entry ./src/client.js --target web --output-filename ./public/app.js",
+    "lint": "run-p lint:js lint:css",
+    "build:server": "webpack --entry ./src/server.js --target node --output-filename ./app-server.js",
+    "build:client": "webpack --entry ./src/client.js --target web --output-filename ./public/app.js",
+    "build:server:watch": "webpack --watch --entry ./src/server.js --target node --output-filename ./app-server.js",
+    "build:client:watch": "webpack --watch --entry ./src/client.js --target web --output-filename ./public/app.js",
+    "build:js": "run-p build:server build:client",
+    "build:js:watch": "run-p build:server:watch build:client:watch",
     "build:css": "webpack --entry ./src/main.css --output-filename ./public/app.css",
-    "build": "npm run build:js && npm run build:css",
-    "start": "npm run lint && npm run build && node app-server.js"
+    "build:css:watch": "webpack --watch --entry ./src/main.css --output-filename ./public/app.css",
+    "build": "run-p build:js build:css",
+    "build:watch": "run-p build:js:watch build:css:watch",
+    "serve": "node app-server.js",
+    "start": "npm run lint && npm run build && npm run serve",
+    "start:watch": "run-p lint build:watch serve"
   },
   "repository": {
     "type": "git",
@@ -45,6 +54,7 @@
     "eslint-cli": "^1.1.1",
     "eslint-plugin-react": "^7.3.0",
     "extract-text-webpack-plugin": "^3.0.0",
+    "npm-run-all": "^4.1.1",
     "postcss-easy-import": "^2.0.0",
     "postcss-loader": "^2.0.6",
     "stylelint": "^8.0.0",
