@@ -4,13 +4,13 @@ SPA (Single Page Application) sample
 ## 1. Get repository
   
 ```bash
-$ git@github.com:Korilakkuma/spa-sample.git
+$ git clone git@github.com:Korilakkuma/spa-sample-with-redux.git
 ```
   
 ## 2. Install npm modules
   
 ```bash
-$ cd spa-sample
+$ cd spa-sample-with-redux
 $ npm install
 ```
   
