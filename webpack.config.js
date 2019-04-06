@@ -1,7 +1,44 @@
-const webpack            = require('webpack');
-const ExtracktTextPlugin = require('extract-text-webpack-plugin');
+const webpack                        = require('webpack');
+const MiniCSSExtractPlugin           = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const nodeExternals                  = require('webpack-node-externals');
 
-module.exports = {
+const serverConfig = {
+  mode: 'development',
+  entry: {
+    server: './src/server.js'
+  },
+  output: {
+    filename: '[name].js',
+    path: __dirname
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: 'babel-loader'
+      }
+    ]
+  },
+  target: 'node',
+  externals: [nodeExternals()],
+  node: {
+    fs: 'empty',
+    net: 'empty'
+  },
+  devtool: 'source-map'
+};
+
+const clientConfig = {
+  mode: 'development',
+  entry: {
+    app: ['./src/client.js', './src/main.css'],
+  },
+  output: {
+    filename: '[name].js',
+    path: `${__dirname}/public`
+  },
   module: {
     rules: [
       {
@@ -11,12 +48,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ExtracktTextPlugin.extract({
-          use: [
-            'css-loader',
-            'postcss-loader'
-          ]
-        })
+        use: [
+          MiniCSSExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader'
+        ]
       }
     ]
   },
@@ -28,11 +64,20 @@ module.exports = {
         }
       }
     }),
-    new ExtracktTextPlugin('./public/app.css')
+    new MiniCSSExtractPlugin({
+      filename: 'app.css',
+      path: `${__dirname}/public`
+    }),
+    new OptimizeCSSAssetsWebpackPlugin({
+      cssProcessorOptions: {
+        map: {
+          inline: false
+        }
+      }
+    })
   ],
-  devtool: 'source-map',
-  node: {
-    fs: 'empty',
-    net: 'empty'
-  }
+  target: 'web',
+  devtool: 'source-map'
 };
+
+module.exports = [serverConfig, clientConfig];
