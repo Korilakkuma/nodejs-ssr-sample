@@ -10,7 +10,7 @@
   "rules": {
     "no-constant-condition": 1,
     "no-debugger": 1,
-    "no-extra-parens": 1,
+    "no-extra-parens": [2, "all", {"ignoreJSX": "multi-line"}],
 
     "no-extra-boolean-cast": 0,
 
