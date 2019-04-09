@@ -29,10 +29,6 @@ class Counter extends React.Component {
         this.props.dispatch(Actions.count(this.props.count - 1));
     }
 
-    componentWillUnmount() {
-        this.props.dispatch(Actions.count(0));
-    }
-
     render() {
         let count;
 
