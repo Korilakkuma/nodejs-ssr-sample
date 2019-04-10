@@ -37,31 +37,31 @@ function render(req, res, title, description) {
     const store = createStore(reducers);
     const state = store.getState();
 
+    const preloadedState = JSON.stringify(state).replace(/</g, '\\u003c');
+
     const context = {};
-    const content = ReactDOMServer.renderToString(
-        <Provider store={store}>
-            <StaticRouter location={req.url} context={context}>
-                {require('./routes').default}
-            </StaticRouter>
-        </Provider>
-    );
 
-    const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>${title}SPA with Redux</title>
-    <meta name="description" content="${description}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes" />
-    <meta name="format-detection" content="telephone=no" />
-    <link rel="stylesheet" href="/app.css" type="text/css" media="all" />
-</head>
-<body>
-    <div id="app">${content}</div>
-    <script type="text/javascript">window.__PRELOADED_STATE__ = ${JSON.stringify(state).replace(/</g, '\\u003c')}</script>
-    <script type="text/javascript" src="/app.js"></script>
-</body>
-</html>`;
-
-    res.status(200).send(html);
+    ReactDOMServer.renderToNodeStream(
+        <html lang="en">
+            <head>
+                <meta charSet="UTF-8" />
+                <title>{title}SPA with Redux</title>
+                <meta name="description" content={description} />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes" />
+                <meta name="format-detection" content="telephone=no" />
+                <link rel="stylesheet" href="/app.css" type="text/css" media="all" />
+            </head>
+            <body>
+                <div id="app">
+                    <Provider store={store}>
+                        <StaticRouter location={req.url} context={context}>
+                            {require('./routes').default}
+                        </StaticRouter>
+                    </Provider>
+                </div>
+                <script type="text/javascript" data-state={preloadedState} />
+                <script type="text/javascript" src="/app.js" />
+            </body>
+        </html>
+    ).pipe(res);
 };

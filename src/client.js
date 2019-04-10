@@ -7,13 +7,11 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import reducers from './reducers';
 
-const preloadedStete = window.__PRELOADED_STATE__;
+const preloadedState = JSON.parse(document.querySelector('script').getAttribute('data-state'));
 
-delete window.__PRELOADED_STATE__;
+const store = createStore(reducers, preloadedState);
 
-const store = createStore(reducers, preloadedStete);
-
-ReactDOM.render(
+ReactDOM.hydrate(
     <Provider store={store}>
         <Router>
             {require('./routes').default}
