@@ -2,10 +2,12 @@
 
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { createStore } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { StaticRouter } from 'react-router';
-import reducers from './reducers';
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
+// import { StaticRouter } from 'react-router';
+import { createMemoryHistory } from 'history';
+import rootReducer from './reducers';
 import express from 'express';
 import logger from 'morgan';
 
@@ -34,12 +36,11 @@ app.listen(port, () => {
 });
 
 function render(req, res, title, description) {
-    const store = createStore(reducers);
-    const state = store.getState();
-
+    const history        = createMemoryHistory({ initialEntries: [req.url], initialIndex: 0 });
+    const middleware     = routerMiddleware(history);
+    const store          = createStore(rootReducer(history), compose(applyMiddleware(middleware)));
+    const state          = store.getState();
     const preloadedState = JSON.stringify(state).replace(/</g, '\\u003c');
-
-    const context = {};
 
     ReactDOMServer.renderToNodeStream(
         <html lang="en">
@@ -54,12 +55,12 @@ function render(req, res, title, description) {
             <body>
                 <div id="app">
                     <Provider store={store}>
-                        <StaticRouter location={req.url} context={context}>
+                        <ConnectedRouter history={history}>
                             {require('./routes').default}
-                        </StaticRouter>
+                        </ConnectedRouter>
                     </Provider>
                 </div>
-                <script type="text/javascript" data-state={preloadedState} />
+                <script type="text/javascript" id="preloadedState" data-state={preloadedState} />
                 <script type="text/javascript" src="/app.js" />
             </body>
         </html>

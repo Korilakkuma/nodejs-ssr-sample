@@ -2,20 +2,24 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
-import reducers from './reducers';
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
+// import { StaticRouter } from 'react-router';
+import { createBrowserHistory } from 'history';
+import rootReducer from './reducers';
 
-const preloadedState = JSON.parse(document.querySelector('script').getAttribute('data-state'));
 
-const store = createStore(reducers, preloadedState);
+const history        = createBrowserHistory();
+const middleware     = routerMiddleware(history);
+const preloadedState = JSON.parse(document.getElementById('preloadedState').getAttribute('data-state'));
+const store          = createStore(rootReducer(history), preloadedState, compose(applyMiddleware(middleware)));
 
 ReactDOM.hydrate(
     <Provider store={store}>
-        <Router>
+        <ConnectedRouter history={history}>
             {require('./routes').default}
-        </Router>
+        </ConnectedRouter>
     </Provider>,
     document.getElementById('app')
 );

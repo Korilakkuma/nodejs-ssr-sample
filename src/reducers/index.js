@@ -1,5 +1,6 @@
 'use strict';
 
+import { connectRouter } from 'connected-react-router';
 import { combineReducers } from 'redux';
 
 function count(state = 0, action) {
@@ -11,6 +12,7 @@ function count(state = 0, action) {
     }
 }
 
-const reducers = combineReducers({ count });
-
-export default reducers;
+export default (history) => combineReducers({
+    count,
+    router: connectRouter(history)
+});
