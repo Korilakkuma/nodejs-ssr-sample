@@ -46,7 +46,7 @@ function render(req, res, title, description) {
         <html lang="en">
             <head>
                 <meta charSet="UTF-8" />
-                <title>{title}SPA with Redux</title>
+                <title>{`${title}SPA with Redux`}</title>
                 <meta name="description" content={description} />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes" />
                 <meta name="format-detection" content="telephone=no" />
